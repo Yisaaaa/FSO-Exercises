@@ -11,6 +11,7 @@ const Display = ({ text, value }) => {
     return <p className="text-xl">{text} {value}</p>
 }
 
+
 const App = () => {
     // save clicks of each button to its own state
     const [good, setGood] = useState(0)
