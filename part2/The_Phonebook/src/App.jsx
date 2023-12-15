@@ -2,7 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { useState, useEffect } from 'react'
 import axios from "axios"
-
+import numberService from "./service/numbers"
+import Add from "./components/Add"
+import Person from "./components/Person"
+import Filter from "./components/Filter"
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -11,11 +14,9 @@ const App = () => {
     const [filterName, setFilter] = useState("")
 
     useEffect(() => {
-        axios.get("http://localhost:3001/persons")
-            .then(res => {
-                console.log(res.data)
-                setPersons(res.data)
-            })
+        numberService.getAll().then(all => {
+            setPersons(all)
+        })
     }, [])
 
 
@@ -25,9 +26,18 @@ const App = () => {
             alert(`${newName} is already added to phonebook`)
             return
         }
-        setPersons(prev => [...prev, { name: newName, number: newNumber }])
-        setNewName("")
-        setNewNumber("")
+
+        // Add person to the db
+        const newPerson = { name: newName, number: newNumber }
+        numberService.create(newPerson)
+            .then(returnedPerson => {
+                setPersons(prev => [...prev, returnedPerson])
+                setNewName("")
+                setNewNumber("")
+            })
+
+
+
     }
 
     function nameAlreadyExists() {
@@ -39,52 +49,42 @@ const App = () => {
         return false
     }
 
-    const filteredNumbers = persons.filter(person => person.name.toLowerCase().startsWith(filterName))
-    const filteredNumbersElements = filteredNumbers.map(person => <p key={person.name} className="text-lg">{person.name} {person.number}</p>)
+    function handleDelete(id, name) {
+        const confirmation = confirm(`Delete ${name}?`)
+        if (confirmation) {
+            numberService.remove(id)
+                .then(data => console.log(data))
+                .catch(error => alert("The person you is already deleted"))
+            setPersons(prevPersons => prevPersons.filter(person => person.id !== id))
+        }
+    }
+
+    const filteredNumbers = persons.filter(person => person.name.toLowerCase().includes(filterName.toLowerCase()))
+
+    const filteredNumbersElements = filteredNumbers.map(person => <Person
+        key={person.name}
+        name={person.name}
+        number={person.number}
+        handleDelete={() => handleDelete(person.id, person.name)} />)
 
 
     return (
         <div className="flex gap-4 flex-col text-lg p-9">
             <h1 className="text-4xl text-slate-900 font-extrabold">Phonebook</h1>
 
-            <div>
-                <p>Filter shown with a:</p>
-                <input
-                    className="border-2 border-slate-700 px-2"
-                    value={filterName}
-                    onChange={(e) => setFilter(e.target.value)} />
-            </div>
+            <Filter value={filterName}
+                handleChange={setFilter} />
+
+            <Add newName={newName}
+                handleNewName={setNewName}
+                newNumber={newNumber}
+                handleNewNumber={setNewNumber}
+                handleSubmit={handleSubmit} />
 
 
-            <h2 className="text-3xl font-semibold">Add a new</h2>
-            <form className="flex gap-0 flex-col " onSubmit={handleSubmit}>
-                <div className="mb-3 flex flex-col gap-2">
-                    <div className="">
-                        <span className="font-semibold">name:</span> <input
-                            required
-                            value={newName}
-                            onChange={(e) => setNewName(e.target.value)}
-                            className="border-2 border-gray-600 " />
-                    </div>
-                    <div>
-                        <span className="font-semibold">number: </span>
-                        <input
-                            required
-                            className="border-2 border-gray-600"
-                            value={newNumber}
-                            onChange={(e) => setNewNumber(e.target.value)} />
-                    </div>
-                </div>
-                <div>
-                    <button
-                        className="text-white bg-slate-800 px-4 rounded"
-                        type="submit">add</button>
-                </div>
-            </form>
-            <div className="mb-8">debug: {newName} {newNumber}</div>
             <h2 className="text-3xl font-bold">Numbers</h2>
 
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-4">
                 {filteredNumbersElements}
 
             </div>
