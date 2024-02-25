@@ -29,15 +29,9 @@ const reducer = (state = initialState, action) => {
 					? { ...anecdote, votes: anecdote.votes + 1 }
 					: anecdote
 			);
-		// return state.map((anecdote) => {
-		// 	const id = action.payload.id;
-		// 	console.log(id, anecdote.id);
-		// 	if (id === anecdote.id) {
-		// 		return { ...anecdote, votes: anecdote.votes + 1 };
-		// 	}
 
-		// 	return anecdote;
-		// });
+		case "CREATE_ANECDOTE":
+			return [...state, asObject(action.payload.anecdote)];
 
 		default:
 			return state;
@@ -48,6 +42,15 @@ export const addVote = (id) => {
 	return {
 		type: "VOTE_INCREMENT",
 		payload: { id },
+	};
+};
+
+export const createAnecdote = (anecdote) => {
+	return {
+		type: "CREATE_ANECDOTE",
+		payload: {
+			anecdote,
+		},
 	};
 };
 
