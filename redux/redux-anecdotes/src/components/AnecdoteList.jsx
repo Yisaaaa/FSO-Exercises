@@ -6,7 +6,17 @@ const AnecdoteList = () => {
 		return b.votes - a.votes;
 	};
 
-	const anecdotes = useSelector((state) => state).sort(sortByVote);
+	// const anecdotes = useSelector((state) => state.anecdotes).sort(sortByVote);
+
+	const anecdotes = useSelector(({ filter, anecdotes }) => {
+		if (filter !== "") {
+			return anecdotes.filter((anecdote) => {
+				return anecdote.content.toLowerCase().includes(filter.toLowerCase());
+			});
+		}
+		return anecdotes;
+	}).sort(sortByVote);
+
 	const dispatch = useDispatch();
 
 	const vote = (id) => {

@@ -1,3 +1,5 @@
+import { combineReducers } from "redux";
+
 const anecdotesAtStart = [
 	"If it hurts, do it more often",
 	"Adding manpower to a late software project makes it later!",
@@ -19,7 +21,7 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject);
 
-const reducer = (state = initialState, action) => {
+const anecdoteReducer = (state = initialState, action) => {
 	console.log("state now: ", state);
 	console.log("action", action);
 	switch (action.type) {
@@ -32,6 +34,16 @@ const reducer = (state = initialState, action) => {
 
 		case "CREATE_ANECDOTE":
 			return [...state, asObject(action.payload.anecdote)];
+
+		default:
+			return state;
+	}
+};
+
+const filterReducer = (state = "", action) => {
+	switch (action.type) {
+		case "FILTER":
+			return action.payload;
 
 		default:
 			return state;
@@ -54,4 +66,14 @@ export const createAnecdote = (anecdote) => {
 	};
 };
 
-export default reducer;
+export const filter = (filter) => {
+	return {
+		type: "FILTER",
+		payload: filter,
+	};
+};
+
+export default combineReducers({
+	anecdotes: anecdoteReducer,
+	filter: filterReducer,
+});
