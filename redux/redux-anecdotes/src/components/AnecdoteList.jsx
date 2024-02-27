@@ -10,12 +10,14 @@ const AnecdoteList = () => {
 
 	const anecdotes = useSelector(({ filter, anecdotes }) => {
 		if (filter !== "") {
-			return anecdotes.filter((anecdote) => {
-				return anecdote.content.toLowerCase().includes(filter.toLowerCase());
-			});
+			return anecdotes.filter((anecdote) =>
+				anecdote.content.toLowerCase().includes(filter)
+			);
 		}
 		return anecdotes;
-	}).sort(sortByVote);
+	});
+
+	const sortedAnecdotes = [...anecdotes].sort(sortByVote);
 
 	const dispatch = useDispatch();
 
@@ -26,7 +28,7 @@ const AnecdoteList = () => {
 
 	return (
 		<div>
-			{anecdotes.map((anecdote) => (
+			{sortedAnecdotes.map((anecdote) => (
 				<div key={anecdote.id}>
 					<div>{anecdote.content}</div>
 					<div>
