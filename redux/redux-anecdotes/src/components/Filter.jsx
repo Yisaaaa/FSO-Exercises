@@ -5,8 +5,10 @@ const Filter = () => {
 	const dispatch = useDispatch();
 
 	const handleChange = (event) => {
-		const filterWord = event.target.value;
-		dispatch(filter(filterWord));
+		setTimeout(() => {
+			const filterWord = event.target.value;
+			dispatch(filter(filterWord));
+		}, 500);
 	};
 
 	const style = {
