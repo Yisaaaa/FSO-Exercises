@@ -1,18 +1,22 @@
 import { useSelector, useDispatch } from "react-redux";
-import { addVote, setAnecdotes } from "../reducers/anecdoteReducer";
+import { addVote, initializeAnecdotes } from "../reducers/anecdoteReducer";
 import {
 	clearNotification,
 	setNotification,
 } from "../reducers/notificationReducer";
-import anecdoteService from "../services/anecdotes";
 import { useEffect } from "react";
 
 const AnecdoteList = () => {
+	const dispatch = useDispatch();
+
 	useEffect(() => {
-		anecdoteService
-			.getAll()
-			.then((anecdotes) => dispatch(setAnecdotes(anecdotes)));
+		dispatch(initializeAnecdotes());
 	}, []);
+	// useEffect(() => {
+	// 	anecdoteService
+	// 		.getAll()
+	// 		.then((anecdotes) => dispatch(setAnecdotes(anecdotes)));
+	// }, []);
 
 	const sortByVote = (a, b) => {
 		return b.votes - a.votes;
@@ -30,8 +34,6 @@ const AnecdoteList = () => {
 	});
 
 	const sortedAnecdotes = [...anecdotes].sort(sortByVote);
-
-	const dispatch = useDispatch();
 
 	const vote = (anecdote) => {
 		dispatch(setNotification(`you voted "${anecdote.content}"`));
