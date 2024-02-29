@@ -34,6 +34,11 @@
       "id": "0b86",
       "content": "If you can't defeat them, join them",
       "votes": 0
+    },
+    {
+      "id": "927e",
+      "content": "i was made using redux thunk library",
+      "votes": 0
     }
   ]
 }
