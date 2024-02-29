@@ -37,7 +37,15 @@ const anecdoteSlice = createSlice({
 	},
 });
 
+// These two below are using thunk library of redux
+// redux allows us to implement async actions so that we
+// wouldnt have to make the communication between the server
+// known to the components that uses it. Redux thunk enables us to
+// write action creators that returns a function instead of an object.
+
 export const initializeAnecdotes = () => {
+	// Redux thunk will intercept this returned function and passes the
+	// dispatch and getState functions of our store into it.
 	return async (dispatch) => {
 		anecdoteService
 			.getAll()
