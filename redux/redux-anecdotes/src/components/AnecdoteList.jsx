@@ -1,9 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { addVote, initializeAnecdotes } from "../reducers/anecdoteReducer";
 import {
-	clearNotification,
-	setNotification,
-} from "../reducers/notificationReducer";
+	incrementVote,
+	initializeAnecdotes,
+} from "../reducers/anecdoteReducer";
+import { setNotification } from "../reducers/notificationReducer";
 import { useEffect } from "react";
 
 const AnecdoteList = () => {
@@ -36,14 +36,15 @@ const AnecdoteList = () => {
 	const sortedAnecdotes = [...anecdotes].sort(sortByVote);
 
 	const vote = (anecdote) => {
-		dispatch(setNotification(`you voted "${anecdote.content}"`));
+		// dispatch(setNotification(`you voted "${anecdote.content}"`));
+		// setTimeout(() => {
+		// 	dispatch(clearNotification());
+		// }, 5000);
 
-		console.log("vote", anecdote.id);
-		dispatch(addVote(anecdote.id));
+		// Using redux thunk
+		dispatch(setNotification(`you voted ${anecdote.content}`), 5);
 
-		setTimeout(() => {
-			dispatch(clearNotification());
-		}, 5000);
+		dispatch(incrementVote(anecdote));
 	};
 
 	return (
