@@ -1,0 +1,29 @@
+{
+  "notes": [
+    {
+      "content": "Retrieving data from the server is still done in the familiar way with the Axios get method",
+      "important": true,
+      "id": "2320"
+    },
+    {
+      "content": "The return value of the useQuery function is an object that indicates the status of the query.",
+      "important": true,
+      "id": "2235"
+    },
+    {
+      "id": "c5a9",
+      "content": "asdf",
+      "important": false
+    },
+    {
+      "id": "8cc2",
+      "content": "new note",
+      "important": true
+    },
+    {
+      "id": "7ea8",
+      "content": "another one",
+      "important": false
+    }
+  ]
+}
