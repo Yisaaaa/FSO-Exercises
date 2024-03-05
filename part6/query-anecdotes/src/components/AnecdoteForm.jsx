@@ -1,5 +1,6 @@
 import { createAnecdote } from "../anecdoteService";
 import { useMutation } from "@tanstack/react-query";
+import { useNotificationDispatch } from "../NotificationContext";
 
 const AnecdoteForm = ({ queryClient }) => {
 	const createAnecdoteMutation = useMutation({
@@ -18,7 +19,7 @@ const AnecdoteForm = ({ queryClient }) => {
 			return;
 		}
 		event.target.anecdote.value = "";
-		console.log("new anecdote");
+
 		createAnecdoteMutation.mutate({ content, votes: 0 });
 	};
 
