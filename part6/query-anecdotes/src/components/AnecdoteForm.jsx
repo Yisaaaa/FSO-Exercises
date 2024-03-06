@@ -1,12 +1,14 @@
 import { createAnecdote } from "../anecdoteService";
 import { useMutation } from "@tanstack/react-query";
-import { useNotificationDispatch } from "../NotificationContext";
+import { useSetNotification } from "../NotificationContext";
 
 const AnecdoteForm = ({ queryClient }) => {
+	const setNotification = useSetNotification();
+
 	const createAnecdoteMutation = useMutation({
 		mutationFn: createAnecdote,
 		onSuccess: (anecdote) => {
-			console.log("called");
+			setNotification(`created ${anecdote.content}`);
 			const anecdotes = queryClient.getQueryData(["anecdotes"]);
 			queryClient.setQueryData(["anecdotes"], anecdotes.concat(anecdote));
 		},
@@ -16,6 +18,7 @@ const AnecdoteForm = ({ queryClient }) => {
 		event.preventDefault();
 		const content = event.target.anecdote.value;
 		if (content.length < 5) {
+			setNotification("anecdote content must be at least 5 characters long");
 			return;
 		}
 		event.target.anecdote.value = "";

@@ -16,7 +16,7 @@ export const useNotificationValue = () => {
 	return useContext(notificationContext)[0];
 };
 
-export const useNotificationDispatch = () => {
+export const useSetNotification = () => {
 	return useContext(notificationContext)[1];
 };
 
