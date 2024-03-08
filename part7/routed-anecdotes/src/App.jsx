@@ -79,9 +79,10 @@ const CreateNew = (props) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		props.addNew({
-			content,
-			author,
-			info,
+			// content: content.props.value,
+			content: content.props.value,
+			author: author.props.value,
+			info: info.props.value,
 			votes: 0,
 		});
 
@@ -91,23 +92,34 @@ const CreateNew = (props) => {
 		navigate("/");
 	};
 
+	const handleReset = (e) => {
+		e.preventDefault();
+
+		content.clear();
+		author.clear();
+		info.clear();
+	};
+
 	return (
 		<div>
 			<h2>create a new anecdote</h2>
 			<form onSubmit={handleSubmit}>
 				<div>
 					content
-					<input name="content" {...content} />
+					<input name="content" {...content.props} />
 				</div>
 				<div>
 					author
-					<input name="author" {...author} />
+					<input name="author" {...author.props} />
 				</div>
 				<div>
 					url for more info
-					<input name="info" {...info} />
+					<input name="info" {...info.props} />
 				</div>
 				<button>create</button>
+				<button type="button" onClick={handleReset}>
+					reset
+				</button>
 			</form>
 		</div>
 	);
