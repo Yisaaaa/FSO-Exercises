@@ -4,6 +4,7 @@
   "description": "Exercises of FSO's part 9",
   "main": "index.js",
   "scripts": {
+    "ts-node": "ts-node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
