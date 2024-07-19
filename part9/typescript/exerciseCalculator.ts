@@ -1,3 +1,5 @@
+import { isNotANumber } from "./utils";
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -6,6 +8,11 @@ interface Result {
   ratingDescription: string;
   target: number;
   average: number;
+}
+
+interface InputValues {
+  target: number;
+  days: number[];
 }
 
 const calculateExercises = (dailyHours: number[], target: number): Result => {
@@ -62,4 +69,40 @@ const getRatingDescription = (rating: number): string => {
   }
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+// Parses the cmd arguments to make sure the parameters given
+// are correct.
+const parseArguments = (args: string[]): InputValues => {
+  if (args.length < 4) {
+    throw new Error("Not enough arguments.");
+  } else {
+    let target: number;
+    let days: number[] = [];
+
+    for (let i = 2; i < args.length; i++) {
+      const arg = args[i];
+
+      if (!isNotANumber(arg)) {
+        if (i === 2) {
+          target = Number(arg);
+        } else {
+          days.push(Number(arg));
+        }
+      } else {
+        throw new Error("Arguments must be numbers.");
+      }
+    }
+
+    return { target, days };
+  }
+};
+
+// console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+
+try {
+  const { target, days } = parseArguments(process.argv);
+  console.log(calculateExercises(days, target));
+} catch (err: unknown) {
+  if (err instanceof Error) {
+    console.log(`You got an error: ${err.message}`);
+  }
+}
